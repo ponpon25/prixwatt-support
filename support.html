@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrixWatt - Support & Aide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --surface: #111827;
+            --surface-hover: #1a2236;
+            --border: rgba(255,255,255,0.06);
+            --text: #e8eaf0;
+            --text-muted: #7a8299;
+            --accent: #22d67a;
+            --accent-dim: rgba(34,214,122,0.12);
+            --accent-glow: rgba(34,214,122,0.25);
+            --yellow: #f5c542;
+            --yellow-dim: rgba(245,197,66,0.12);
+            --blue: #4ea8de;
+            --blue-dim: rgba(78,168,222,0.12);
+            --red: #f06060;
+            --red-dim: rgba(240,96,96,0.10);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Ambient background ── */
+        .ambient {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .ambient::before {
+            content: '';
+            position: absolute;
+            width: 600px; height: 600px;
+            top: -180px; right: -120px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            filter: blur(100px);
+            animation: drift 18s ease-in-out infinite alternate;
+        }
+        .ambient::after {
+            content: '';
+            position: absolute;
+            width: 500px; height: 500px;
+            bottom: -100px; left: -80px;
+            background: radial-gradient(circle, rgba(78,168,222,0.15) 0%, transparent 70%);
+            filter: blur(100px);
+            animation: drift 22s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.1); }
+        }
+
+        /* ── Layout ── */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 56px;
+            animation: fadeUp 0.6s ease-out both;
+        }
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px; height: 72px;
+            background: linear-gradient(135deg, var(--accent), #18b060);
+            border-radius: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px var(--accent-glow);
+            letter-spacing: -1px;
+        }
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+        .header h1 span { color: var(--accent); }
+        .header .subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 400;
+        }
+        .badge-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 100px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .badge .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 6px var(--accent);
+        }
+
+        /* ── Sections ── */
+        .section {
+            margin-bottom: 32px;
+            animation: fadeUp 0.6s ease-out both;
+        }
+        .section:nth-child(2) { animation-delay: 0.08s; }
+        .section:nth-child(3) { animation-delay: 0.16s; }
+        .section:nth-child(4) { animation-delay: 0.24s; }
+        .section:nth-child(5) { animation-delay: 0.32s; }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px; height: 32px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+        }
+        .icon-green { background: var(--accent-dim); }
+        .icon-yellow { background: var(--yellow-dim); }
+        .icon-blue { background: var(--blue-dim); }
+        .icon-red { background: var(--red-dim); }
+
+        /* ── Cards ── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(255,255,255,0.1);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+        }
+
+        /* ── Contact card ── */
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .contact-avatar {
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--blue), #7c5fd6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .contact-info { flex: 1; }
+        .contact-info .label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        .contact-info a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+        .contact-info a:hover { color: #6ef0a8; }
+
+        /* ── Troubleshoot list ── */
+        .troubleshoot-list {
+            display: grid;
+            gap: 10px;
+        }
+        .troubleshoot-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            transition: border-color 0.3s, transform 0.2s;
+        }
+        .troubleshoot-item:hover {
+            border-color: rgba(255,255,255,0.1);
+            transform: translateX(4px);
+        }
+        .troubleshoot-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .troubleshoot-item .t-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .troubleshoot-item .t-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ── FAQ ── */
+        .faq-list { display: grid; gap: 10px; }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .faq-item:hover { border-color: rgba(255,255,255,0.1); }
+
+        .faq-item summary {
+            padding: 16px 18px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .faq-item summary:hover { background: var(--surface-hover); }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after {
+            content: '+';
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+        .faq-item[open] summary::after {
+            transform: rotate(45deg);
+            color: var(--accent);
+        }
+        .faq-answer {
+            padding: 0 18px 16px;
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .faq-answer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .faq-answer a:hover { text-decoration: underline; }
+
+        /* ── CTA ── */
+        .cta-card {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(34,214,122,0.08), rgba(78,168,222,0.06));
+            border: 1px solid var(--accent-dim);
+        }
+        .cta-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: var(--accent);
+            color: #0a0e17;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px var(--accent-glow);
+        }
+
+        /* ── Footer ── */
+        footer {
+            margin-top: 48px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        footer a:hover { color: var(--accent); }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            .wrapper { padding: 32px 16px 60px; }
+            .header h1 { font-size: 28px; }
+            .contact-card { flex-direction: column; align-items: flex-start; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<div class="wrapper">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">⚡</div>
+        <h1>Prix<span>Watt</span></h1>
+        <p class="subtitle">Centre d'aide & support</p>
+        <div class="badge-row">
+            <span class="badge"><span class="dot"></span> Électricité</span>
+            <span class="badge"><span class="dot"></span> Gaz</span>
+            <span class="badge"><span class="dot"></span> Tarifs à jour</span>
+        </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon icon-blue">✉️</span>
+            Nous contacter
+        </div>
+        <div class="card">
+            <div class="contact-card">
+                <div class="contact-avatar">👤</div>
+                <div class="contact-info">
+                    <div class="label">Support par email — réponse sous 24h</div>
+                    <a href="mailto:contact@lucienponcet.fr">contact@lucienponcet.fr</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dépannage -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon icon-yellow">🔧</span>
+            Dépannage rapide
+        </div>
+        <div class="troubleshoot-list">
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-icon icon-green">📊</div>
+                <div>
+                    <div class="t-title">Tarifs pas à jour</div>
+                    <div class="t-desc">Les prix de l'électricité et du gaz sont mis à jour quotidiennement.</div>
+                </div>
+            </div>
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-icon icon-blue">🔔</div>
+                <div>
+                    <div class="t-title">Alertes manquantes</div>
+                    <div class="t-desc">iOS → Réglages → PrixWatt → Notifications → Activer</div>
+                </div>
+            </div>
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-icon icon-yellow">💰</div>
+                <div>
+                    <div class="t-title">Achat non débloqué</div>
+                    <div class="t-desc">Dans l'app : Réglages → « Restaurer les achats »</div>
+                </div>
+            </div>
+            <div class="troubleshoot-item">
+                <div class="troubleshoot-icon icon-red">🗑️</div>
+                <div>
+                    <div class="t-title">Problème de cache</div>
+                    <div class="t-desc">Supprimer l'app → Réinstaller depuis l'App Store (données locales uniquement)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section">
+        <div class="section-title">
+            <span class="icon icon-green">💬</span>
+            Questions fréquentes
+        </div>
+        <div class="faq-list">
+            <details class="faq-item">
+                <summary>Pourquoi certains fournisseurs ne sont pas listés ?</summary>
+                <div class="faq-answer">
+                    PrixWatt référence uniquement les tarifs officiels publiés par le 
+                    <a href="https://www.energie-mediateur.fr" target="_blank" rel="noopener">Médiateur national de l'énergie</a>, 
+                    garantissant la fiabilité des données pour l'électricité comme pour le gaz.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Le calculateur affiche 0 € d'économies ?</summary>
+                <div class="faq-answer">
+                    Vérifiez que les champs suivants sont correctement remplis : le coût de votre abonnement actuel (€/an) 
+                    et votre consommation annuelle (kWh/an).
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>Les alertes de prix plancher ne fonctionnent pas ?</summary>
+                <div class="faq-answer">
+                    Les alertes sont envoyées via les notifications push iOS. 
+                    Assurez-vous d'avoir autorisé les notifications pour PrixWatt dans les réglages de votre iPhone.
+                </div>
+            </details>
+            <details class="faq-item">
+                <summary>L'app compare-t-elle aussi les tarifs du gaz ?</summary>
+                <div class="faq-answer">
+                    Oui ! PrixWatt compare désormais les offres d'électricité et de gaz naturel, 
+                    avec les mêmes outils de calcul et d'alerte pour les deux énergies.
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="section">
+        <div class="card cta-card">
+            <p>PrixWatt vous aide à économiser ? Laissez-nous une note !</p>
+            <a class="cta-btn" href="https://apps.apple.com/fr/app/prixwatt/id6757199470" target="_blank" rel="noopener">
+                ⭐ Évaluer sur l'App Store
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div>© 2025 PrixWatt — Tous droits réservés</div>
+        <div class="footer-links">
+            <a href="https://ponpon25.github.io/prixwatt-privacy/">Politique de confidentialité</a>
+            <a href="mailto:contact@lucienponcet.fr">Contact</a>
+        </div>
+    </footer>
+
+</div>
+
+</body>
+</html>
